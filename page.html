@@ -1,0 +1,214 @@
+<!-- Author: Benedict Uttley
+	 Last Revision: 13/02/2018
+	 Version 1.1 -->
+
+<!-- This html file is served to users upon connection. It essentially consists of three elements. The CSS for some extremelly simple styling. Secondly there is the javascript which contains emits to the node server and there are also listeners that listen for incoming messages from the node server. Finally there is the HTML which is very simple. The HTML mostly consists of divs that contain various data such as the question, others that will increase in size, the size for a div increase when the corresponding user that the div represents answers a question correctly. -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="emojionearea.min.css" media="screen">
+
+	<link rel="import" href="gamePage.html">
+	<script type="text/javascript" src="emojionearea.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" type="text/css" href="frameStyle.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="gameStyle.css" media="screen">
+	
+	<title>Real time game</title>
+
+
+<script type="text/javascript">
+
+// Chat emoji plugin alterations and setting its properties
+
+$("#facea").click(function() {
+  $("#texttest").append('<img src="https://cdn.okccdn.com/media/img/emojis/apple/1F60C.png"/>');
+});
+
+$(document).ready(function() {
+	$("#example1").emojioneArea({
+
+		events: {
+			keydown: function(editor, event) {
+				// catches everything but enter
+				if (event.which == 13) {
+					$('#rs').append(this.getText());
+					socket.emit('clientMessage', this.getText());
+					 $("div.emojionearea-editor").data("emojioneArea").setText('');
+					 event.preventDefault();
+					 return false;
+				} else {
+
+				}
+			}
+		},
+		autocomplete: false,
+		 emojiPlaceholder: ":smile_cat:",
+		 useInternalCDN: true,
+		 buttonTitle: "Browse emoji's!",
+			pickerPosition: "left",
+		 search: false,
+		 tones: false,
+
+		 textcomplete: {
+			maxCount  : 5,
+			placement : 'absleft'
+	},
+
+attributes: {
+		 spellcheck : true,
+
+	 }
+ }
+);
+});
+
+
+/*	The front-end part of the game involves connecting the client to the http server that node provides, on port 8080.
+	There are also several listeners that update various div containers when the listener is triggered as a result of an
+	emit from the server.*/
+
+		var socket = io();
+
+
+
+		var username = prompt('What username would you like to use?');
+		var playerName = username;
+
+
+
+		var room = prompt('Lobby to join:');
+		socket.on('connect', function() {
+			// Connected, let's sign-up for to receive messages for this room
+			socket.emit('login', username);
+			console.log('logged in as: ' + username);
+			socket.emit('room', room);
+			console.log('Chat Room: ' + room);
+
+		});
+
+			var myGame;
+			window.onload = function() {
+
+
+		// Assigning the HTML elements to be used to variables...
+		var link = document.querySelector('link[rel="import"]');
+    	var content = link.import;
+
+    	// Grab DOM from warning.html's document.
+    	var el = content.querySelector('.gameWindow');
+    	document.body.appendChild(el.cloneNode(true));	// load the games HTML file
+
+
+		socket.on('message', function(content) {
+					addMessage(content);
+
+				});
+
+
+
+			// Assigning the HTML elements to be used to variables...
+			var welcome = document.getElementById("welcome");
+			
+			var results = document.getElementById("results");
+
+			var messagesElement = document.getElementById('logged_in_users');
+			var messagesElement2 = document.getElementById('messages');
+			var lastMessageElement = null;
+			var lastMessageElement2 = null;
+
+			function addMessage(message) {
+				var newMessageElement = document.createElement('div');
+				newMessageElement.className="messagesnew";
+				var newMessageText = document.createTextNode(message);
+
+				newMessageElement.appendChild(newMessageText);
+				messagesElement.insertBefore(newMessageElement,
+				lastMessageElement);
+				lastMessageElement = newMessageElement;
+				var elem = document.getElementById('logged_in_users');
+				elem.scrollTop = 0;
+			
+			}
+
+
+			/* Start game when enough users have joined. Currntly this just means hiding the loading screen and displaying the game
+			   window. In future versions i will make a sort of waiting lobby that then closes (or a new html page is displayed) when
+			   the start game emit is recieved. */
+			socket.on('gameStarted', function(data) {
+				console.log("WTF IS GOING ON!!??");
+				document.getElementById('loader').style.display = "none";
+				document.getElementById("gameWindow").style.display = "block";
+			});
+
+			/* When the game is over and the emit is recieved, the game window is hidden and the final stats div, that still needs to be
+			   developed, is displayed to the user. There eill then need to be options displayed including finding a new game or exiting
+			   the game (bare minimum). */
+			socket.on('gameEnded', function(data) {
+				console.log("Game Over!");
+				document.getElementById("gameWindow").style.display = "none";
+				//document.getElementById('finalStats').style.display = "block";
+				window.location.href = data;
+			});
+
+
+				$.getScript("gameClient_Side.js", function(){
+
+					});
+
+		}
+	</script>
+
+</head>
+
+
+<!-- HTML elements for game frame and outside elements -->
+
+<body class="main">
+
+	<!-- This div is the loading screen which is shown untill enough players have joined the game -->
+	<div id='container'>
+
+	    <h5 id='roomName'></h5>
+	    <h5 id='uname'></h5>
+
+
+
+	  <div  id='logged_in_users' class="ts" >
+	  </div>
+
+	<br/>
+
+
+	<div class="span6" id="lol">
+	<textarea id="example1"></textarea>
+	</div>
+
+
+	</div>
+
+	<div id="loader" class="loader"></div>
+
+	<!--Div displayed to winner of game when they have scored 10 points -->
+	<div id="finalStats" style="display:none;">
+		<p>You are the winner of the game, congradulations!</p>
+		<br>
+
+		<!-- Form to search for new game when you are only player left in game, this can eventually just be that
+				 the player is routed to the main menu but is awarded winner points. In addition this form will need
+				 to be integrated into the final stats display -->
+		<form id="findGame">
+			<input id="fGame" type="button" value="Find New Game">
+		</form>
+
+	</div>
+
+	
+</body>
+
+</html>

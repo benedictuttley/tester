@@ -1,0 +1,155 @@
+<style>  
+
+.span6{
+		float: left;
+		width: 250px;
+		display: inline-block;
+
+	}
+
+.emojionearea-editor:not(.inline) {
+		min-height: 30px!important;
+		max-height: 100px!important;
+	}
+
+body{
+		padding: none;
+		background-color:#13133a;
+		color: white;
+		margin:0px;
+		font-family: Tahoma;
+		font-size: 14px;
+	}
+
+	#gameWindow {
+
+		border: 3px solid black;
+		padding: 20px;
+		position: absolute;
+		margin: auto;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: 800px;
+		height: 600px;
+	}
+
+	
+#container{
+ 		vertical-align:top;
+ 		position: absolute;
+ 		width: auto;
+		border-right: 2px solid white;
+		margin: none;
+ 		height: 100%;
+ 		padding: 8px;
+	}
+
+#emoji_list{
+			width: 250px;
+			height: 50px;
+			background-color: white;
+	}
+	
+#game{
+		position: absolute;
+		right: 500px;
+		width: 600px;
+		height: 600px;
+		border: 5px solid white;
+	}
+	
+#texttest{
+		height: 100px;
+		overflow: auto;
+		width: 250px;
+	}
+
+.messagesnew{
+		width: 220px;
+		background-color: #13133a;
+		margin: 8px;
+		padding: 4px;
+		border-radius: 5px;
+		display: inline-block;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+		font-size: 10px;
+	}
+	
+.j{
+		width: 250px;
+		resize: none;
+	}
+	
+
+.ts{
+		background-color: white;
+		width: 250px;
+		height: 300px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+
+	/* width */
+::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	/* Track */
+::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	/* Handle */
+::-webkit-scrollbar-thumb {
+		background: #888;
+	}
+
+	/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+			background: #555;
+	}
+
+
+/* Below is the styling for the loader that is displayed when no of users < reuired no of users (need to refrence source as is not mine.)*/
+
+#loader {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		z-index: 1;
+		width: 150px;
+		height: 150px;
+		margin: -75px 0 0 -75px;
+		border: 16px solid #f3f3f3;
+		border-radius: 50%;
+		border-top: 16px solid #3498db;
+		width: 120px;
+		height: 120px;
+		-webkit-animation: spin 2s linear infinite;
+		animation: spin 2s linear infinite;
+	}
+
+		/* Safari */
+
+@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+	
+</style>

@@ -1,0 +1,52 @@
+<style>  
+
+#QuestionAnswer {
+
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-block
+	}
+
+#progress {
+		cursor: pointer;
+		background: #61AC33;
+		padding: 10px;
+		text-align: right;
+		font-weight: bold;
+		color: #FFF;
+	}
+
+#progress:active {
+		color: #FFF;
+		background: #000;
+	}
+
+#win {
+		width: 600px;
+		padding: 10px;
+		text-align: right;
+		font-weight: bold;
+		border-right: solid 1px #000;
+	}
+
+#Div1 {
+		cursor: pointer;
+		background-color: Red;
+		padding: 10px;
+		text-align: right;
+		font-weight: bold;
+		color: #FFF;
+		width: 80px;
+	}
+
+#Div2 {
+		cursor: pointer;
+		background-color: Green;
+		padding: 10px;
+		text-align: right;
+		font-weight: bold;
+		color: #FFF;
+		width: 80px;
+	}
+
+</style>
